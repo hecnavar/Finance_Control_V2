@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions") 
+@CrossOrigin(origins = "http://localhost:5173")
 public class TransactionController {
 
     private final TransactionService service;
@@ -31,6 +32,16 @@ public class TransactionController {
         return service.findById(id)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> update(@PathVariable Long id, @RequestBody Transaction transactionDetails) {
+        if (!service.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        transactionDetails.setId(id); 
+        Transaction updatedTransaction = service.save(transactionDetails);
+        return ResponseEntity.ok(updatedTransaction);
     }
     
     @DeleteMapping("/{id}")
