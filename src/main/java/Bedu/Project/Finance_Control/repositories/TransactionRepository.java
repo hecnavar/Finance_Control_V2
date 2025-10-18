@@ -1,7 +1,8 @@
 package Bedu.Project.Finance_Control.repositories;
 
 import Bedu.Project.Finance_Control.models.Transaction;
-import Bedu.Project.Finance_Control.models.MonthlySummaryProjection; 
+import Bedu.Project.Finance_Control.repositories.TransactionRepository;
+import Bedu.Project.Finance_Control.models.MonthlySummaryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     @Query("""
-        SELECT SUM(CASE 
+     SELECT SUM(CASE 
                         WHEN t.type = 'INCOME' THEN t.amount 
                         ELSE -t.amount 
                     END) 
@@ -21,16 +22,15 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     """)
     BigDecimal calculateTotalBalance();
 
-    @Query(value = """
+         @Query(value = """
         SELECT 
-            CAST(FORMATDATETIME(t.date, 'yyyy') AS INT) AS year, 
-            CAST(FORMATDATETIME(t.date, 'MM') AS INT) AS month,
+             EXTRACT(YEAR FROM t.date) AS totalYear,
+            EXTRACT(MONTH FROM t.date) AS totalMonth,
             SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END) AS totalIncome,
             SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END) AS totalExpense
         FROM transactions t
-        -- La única forma de agrupar en H2 es repitiendo la función
-        GROUP BY CAST(FORMATDATETIME(t.date, 'yyyy') AS INT), CAST(FORMATDATETIME(t.date, 'MM') AS INT)
-        ORDER BY year DESC, month DESC
+        GROUP BY 1, 2 
+        ORDER BY 1 DESC, 2 DESC
     """, nativeQuery = true)
-    List<MonthlySummaryProjection> getMonthlySummaryData();
+    List<MonthlySummaryDTO> getMonthlySummaryData();
 }

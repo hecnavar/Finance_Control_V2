@@ -5,6 +5,6 @@ import java.math.BigDecimal;
 public interface MonthlySummaryProjection {
     Integer getYear();
     Integer getMonth();
-    BigDecimal getTotalIncome();
+    BigDecimal getTotalIncome(); 
     BigDecimal getTotalExpense();
 }

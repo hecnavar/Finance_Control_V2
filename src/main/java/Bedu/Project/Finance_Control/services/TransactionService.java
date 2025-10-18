@@ -1,7 +1,7 @@
 package Bedu.Project.Finance_Control.services;
 
 import Bedu.Project.Finance_Control.models.Transaction;
-import Bedu.Project.Finance_Control.models.MonthlySummaryProjection; 
+import Bedu.Project.Finance_Control.models.MonthlySummaryDTO;
 import Bedu.Project.Finance_Control.repositories.TransactionRepository;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class TransactionService {
         return (balance != null) ? balance : BigDecimal.ZERO; 
     }
     
-    public List<MonthlySummaryProjection> getMonthlySummary() {
-        return repository.getMonthlySummaryData();
-    }
+    public List<MonthlySummaryDTO> getMonthlySummary() { 
+            return repository.getMonthlySummaryData();
+        }
 }

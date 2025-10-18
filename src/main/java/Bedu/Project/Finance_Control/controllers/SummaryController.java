@@ -1,8 +1,9 @@
 package Bedu.Project.Finance_Control.controllers;
 
-import Bedu.Project.Finance_Control.models.MonthlySummaryProjection;
+import Bedu.Project.Finance_Control.models.MonthlySummaryDTO;
 import Bedu.Project.Finance_Control.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -18,12 +19,16 @@ public class SummaryController {
     }
 
     @GetMapping("/balance")
-    public BigDecimal getBalance() {
-        return service.calculateBalance();
+    public ResponseEntity<BigDecimal> getBalance() {
+        BigDecimal balance = service.calculateBalance();
+        BigDecimal safeBalance = balance != null ? balance : BigDecimal.ZERO; 
+        
+        return ResponseEntity.ok(safeBalance);
     }
 
     @GetMapping("/monthly")
-    public List<MonthlySummaryProjection> getMonthlySummary() {
-        return service.getMonthlySummary();
+    public ResponseEntity<List<MonthlySummaryDTO>> getMonthlySummary() {
+        List<MonthlySummaryDTO> summary = service.getMonthlySummary(); 
+        return ResponseEntity.ok(summary);
     }
 }

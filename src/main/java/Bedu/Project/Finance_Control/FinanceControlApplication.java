@@ -1,4 +1,3 @@
-
 package Bedu.Project.Finance_Control;
 
 import Bedu.Project.Finance_Control.models.Transaction;
@@ -23,42 +22,23 @@ public class FinanceControlApplication {
         return (args) -> {
             if (repository.count() == 0) { 
                 
-                
+                // Septiembre
                 repository.save(new Transaction(
-                    new BigDecimal("3500.00"), 
-                    "INCOME", 
-                    LocalDate.parse("2025-09-15"), 
-                    "Salario Septiembre", 
-                    "Salario")
+                    new BigDecimal("3500.00"), "INCOME", LocalDate.parse("2025-09-15"), "Salario Septiembre", "Salario")
                 );
                 repository.save(new Transaction(
-                    new BigDecimal("500.00"), 
-                    "EXPENSE", 
-                    LocalDate.parse("2025-09-20"), 
-                    "Renta", 
-                    "Vivienda")
+                    new BigDecimal("500.00"), "EXPENSE", LocalDate.parse("2025-09-20"), "Renta", "Vivienda")
                 );
 
+                // Octubre
                 repository.save(new Transaction(
-                    new BigDecimal("150.50"), 
-                    "INCOME", 
-                    LocalDate.parse("2025-10-05"), 
-                    "Venta de garage", 
-                    "Varios")
+                    new BigDecimal("150.50"), "INCOME", LocalDate.parse("2025-10-05"), "Venta de garage", "Varios")
                 );
                 repository.save(new Transaction(
-                    new BigDecimal("30.00"), 
-                    "EXPENSE", 
-                    LocalDate.parse("2025-10-01"), 
-                    "Café", 
-                    "Comida")
+                    new BigDecimal("30.00"), "EXPENSE", LocalDate.parse("2025-10-01"), "Café", "Comida")
                 );
                 repository.save(new Transaction(
-                    new BigDecimal("45.99"), 
-                    "EXPENSE", 
-                    LocalDate.parse("2025-10-14"), 
-                    "Cena", 
-                    "Comida")
+                    new BigDecimal("45.99"), "EXPENSE", LocalDate.parse("2025-10-14"), "Cena", "Comida")
                 );
             }
         };
