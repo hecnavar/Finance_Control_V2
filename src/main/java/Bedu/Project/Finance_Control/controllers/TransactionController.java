@@ -12,40 +12,48 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class TransactionController {
 
-    private final TransactionService service;
+private final TransactionService service;
 
     public TransactionController(TransactionService service) {
-        this.service = service;
+    this.service = service;
     }
+
 
     @PostMapping
-    @PutMapping("/{id}")
-    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) {
-        Transaction savedTransaction = service.save(transaction); 
-
-        return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
+    Transaction newTransaction = service.save(transaction); 
+    return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
     }
-    
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transactionDetails) {
+    if (!service.findById(id).isPresent()) {
+    return ResponseEntity.notFound().build();
+    }
+
+    transactionDetails.setId(id); 
+    Transaction updatedTransaction = service.save(transactionDetails);
+    return ResponseEntity.ok(updatedTransaction);
+    }
 
     @GetMapping
     public List<Transaction> findAll() {
-        return service.findAll();
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<Transaction> findById(@PathVariable Long id) {
-        return service.findById(id)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    return service.findAll();
     }
 
-    
+    @GetMapping("/{id}")
+    public ResponseEntity<Transaction> findById(@PathVariable Long id) {
+    return service.findById(id)
+    .map(ResponseEntity::ok)
+    .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        if (!service.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        service.deleteById(id);
-        return ResponseEntity.noContent().build();
+    if (!service.findById(id).isPresent()) {
+    return ResponseEntity.notFound().build();
+    }
+    service.deleteById(id);
+    return ResponseEntity.noContent().build();
     }
 }
