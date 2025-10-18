@@ -1,9 +1,11 @@
 package Bedu.Project.Finance_Control.services;
 
 import Bedu.Project.Finance_Control.models.Transaction;
+import Bedu.Project.Finance_Control.models.MonthlySummaryProjection; 
 import Bedu.Project.Finance_Control.repositories.TransactionRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +32,16 @@ public class TransactionService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+
+
+    public BigDecimal calculateBalance() {
+        BigDecimal balance = repository.calculateTotalBalance();
+        return (balance != null) ? balance : BigDecimal.ZERO; 
+    }
+    
+    public List<MonthlySummaryProjection> getMonthlySummary() {
+        return repository.getMonthlySummaryData();
     }
 }

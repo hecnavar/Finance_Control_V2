@@ -1,3 +1,5 @@
+// Archivo: TransactionRepository.java (SOLUCIÓN FINAL DEL ERROR 500)
+
 package Bedu.Project.Finance_Control.repositories;
 
 import Bedu.Project.Finance_Control.models.Transaction;
@@ -20,15 +22,16 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
         FROM Transaction t
     """)
     BigDecimal calculateTotalBalance();
-    
+
     @Query(value = """
         SELECT 
-            YEAR(t.date) AS year, 
-            MONTH(t.date) AS month,
+            CAST(FORMATDATETIME(t.date, 'yyyy') AS INT) AS year, 
+            CAST(FORMATDATETIME(t.date, 'MM') AS INT) AS month,
             SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END) AS totalIncome,
             SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END) AS totalExpense
         FROM transactions t
-        GROUP BY year, month
+        -- CORRECCIÓN FINAL: Repetir las funciones completas en GROUP BY
+        GROUP BY CAST(FORMATDATETIME(t.date, 'yyyy') AS INT), CAST(FORMATDATETIME(t.date, 'MM') AS INT)
         ORDER BY year DESC, month DESC
     """, nativeQuery = true)
     List<MonthlySummaryProjection> getMonthlySummaryData();
