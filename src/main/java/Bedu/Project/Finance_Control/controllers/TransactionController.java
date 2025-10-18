@@ -2,6 +2,7 @@ package Bedu.Project.Finance_Control.controllers;
 
 import Bedu.Project.Finance_Control.models.Transaction;
 import Bedu.Project.Finance_Control.services.TransactionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,9 +19,13 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> create(@RequestBody Transaction transaction) {
-        return ResponseEntity.ok(service.save(transaction));
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) {
+        Transaction savedTransaction = service.save(transaction); 
+
+        return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
     }
+    
 
     @GetMapping
     public List<Transaction> findAll() {
@@ -33,16 +38,7 @@ public class TransactionController {
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<Transaction> update(@PathVariable Long id, @RequestBody Transaction transactionDetails) {
-        if (!service.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        transactionDetails.setId(id); 
-        Transaction updatedTransaction = service.save(transactionDetails);
-        return ResponseEntity.ok(updatedTransaction);
-    }
+
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {

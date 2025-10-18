@@ -22,15 +22,17 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     """)
     BigDecimal calculateTotalBalance();
 
-         @Query(value = """
+@Query(value = """
         SELECT 
-             EXTRACT(YEAR FROM t.date) AS totalYear,
-            EXTRACT(MONTH FROM t.date) AS totalMonth,
-            SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END) AS totalIncome,
-            SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END) AS totalExpense
-        FROM transactions t
-        GROUP BY 1, 2 
+            new Bedu.Project.Finance_Control.models.MonthlySummaryDTO(
+                EXTRACT(YEAR FROM t.date),
+                EXTRACT(MONTH FROM t.date),
+                SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END),
+                SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END)
+            )
+        FROM Transaction t
+        GROUP BY EXTRACT(YEAR FROM t.date), EXTRACT(MONTH FROM t.date)
         ORDER BY 1 DESC, 2 DESC
-    """, nativeQuery = true)
+    """)
     List<MonthlySummaryDTO> getMonthlySummaryData();
 }
