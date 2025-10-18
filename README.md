@@ -1,5 +1,6 @@
-**Control de Finanzas Personales (Full Stack)**
-Este es un proyecto de control de finanzas personales desarrollado con una arquitectura Full Stack que utiliza React para la interfaz de usuario y Spring Boot para el backend y la gestión de datos.
+# Control de Finanzas Personales (Full Stack)**
+Este es un proyecto de control de finanzas personal
+es desarrollado con una arquitectura Full Stack que utiliza React para la interfaz de usuario y Spring Boot para el backend y la gestión de datos.
 
 **Tecnologías Utilizadas**
 Backend -> Java 21, Spring Boot 3
