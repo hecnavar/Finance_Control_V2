@@ -30,7 +30,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END) AS totalIncome,
             SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END) AS totalExpense
         FROM transactions t
-        -- CORRECCIÓN FINAL: Repetir las funciones completas en GROUP BY
+        -- CORRECCIÓN: Repetir las funciones completas para el GROUP BY
         GROUP BY CAST(FORMATDATETIME(t.date, 'yyyy') AS INT), CAST(FORMATDATETIME(t.date, 'MM') AS INT)
         ORDER BY year DESC, month DESC
     """, nativeQuery = true)
